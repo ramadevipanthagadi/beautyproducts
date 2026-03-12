@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "yourdockerhubusername/makeup-products"
+        IMAGE_NAME = "sunithriyansh/makeup-products"
     }
 
     stages {
@@ -29,8 +29,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS')]) {
+                    usernameVariable: 'sunithriyansh',
+                    passwordVariable: 'Sunitha@565')]) {
 
                     sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                 }
