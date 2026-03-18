@@ -1,28 +1,54 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "beautyproducts"
+        DOCKER_HUB = "yourdockerhubusername"
+    }
+
     stages {
-        stage('Clone') {
+
+        stage('Checkout Code') {
             steps {
-                echo 'Cloning...'
+                git 'https://github.com/ramadevipanthagadi/beautyproducts.git'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building...'
+                sh 'mvn clean package'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing...'
+                sh 'mvn test'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $DOCKER_HUB/$IMAGE_NAME .'
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-cred',
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]) {
+                    sh 'docker login -u $USER -p $PASS'
+                    sh 'docker push $DOCKER_HUB/$IMAGE_NAME'
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying...'
+                sh 'kubectl apply -f deployment.yaml'
+                sh 'kubectl apply -f service.yaml'
             }
         }
     }
