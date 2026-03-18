@@ -1,7 +1,11 @@
-FROM openjdk:8-jdk-alpine
+# Use Java base image
+FROM openjdk:11-jdk-slim
 
+# Set working directory
 WORKDIR /app
 
-COPY target/makeup-products-app-1.0.jar app.jar
+# Copy jar file
+COPY target/*.jar app.jar
 
-CMD ["java","-jar","app.jar"]
+# Run application
+ENTRYPOINT ["java","-jar","app.jar"]
