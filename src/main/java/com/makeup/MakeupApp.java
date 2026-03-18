@@ -14,7 +14,7 @@ public class MakeupApp {
 
         System.out.println("Makeup Products Available:");
 
-        for(String product : products) {
+        for (String product : products) {
             System.out.println(product);
         }
     }
